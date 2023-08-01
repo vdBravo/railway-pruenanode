@@ -1,7 +1,20 @@
 const express = require('express');
 const app = express();
 
+require('dotenv').config();
+
 const port = process.env.PORT || 3000;
+
+//Conexion a base de datos 
+
+const mongoose = require('mongoose');
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.sckejd7.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
+
+mongoose.connect(uri, 
+    {useNewUrlParser: true, useUnifiedTopology: true}
+)
+    .then(() => console.log('Base de datos conectada'))
+    .catch(err => console.log(err))
 
 //Motor de plantillas
 
@@ -12,13 +25,9 @@ app.set('viewa', __dirname + './views')
 
 app.use(express.static(__dirname + "/public"));
 
-app.get('/', (req, res) => {
-    res.render("index", {titulo: "titulo de views inicio  dinamico"});
-});
-
-app.get('/servicios', (req, res) => {
-    res.render("servicios", {tituloServicios: "titulo de views servicios"});
-});
+//Rutas de la Api
+app.use('/', require('./router/RutasW'));
+app.use('/mascotas', require('./router/Mascotas'));
 
 app.use('/', (req, res, next) => {
     res.status(404).render("404", {titulo: "404", descripcion: "Not Found"});
