@@ -1,6 +1,10 @@
-<%- include("templates/cabecera", {tituloWeb: 'Pagina inicio'}) %>
+<%- include("templates/cabecera", {tituloWeb: 'Mascotas-lista'}) %>
 
     <div class="container">
+
+        <a class="btn btn-success my-4" href="/mascotas/crear">
+          CREAR
+        </a>
 
         <table class="table">      
 
@@ -20,7 +24,11 @@
                             <th scope="row"><%= mascota.id %></th>
                             <td><%= mascota.nombre %></td>
                             <td><%= mascota.descripcion %></td>
-                            <td>@mdo</td>
+                            <td>
+                              <a class="btn btn-warning btno-sm"
+                                  href="mascotas/<%= mascota.id %>"
+                              >Editar</a>
+                            </td>
                           </tr>
                     <% }) %>
                 <% } %>

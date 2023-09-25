@@ -1,0 +1,73 @@
+<%- include("templates/cabecera", {tituloWeb: 'Mascotas'}) %>
+
+<div class="container">
+    
+    <h1>Detalle Mascota</h1>
+  
+    <% if (error) { %>
+        <%= mensaje %> 
+        <a 
+            href="/mascotas"
+            class="btn btn-dark btn-block my-2"
+        >
+            Volver
+        </a>
+    <% } %>
+
+    <% if (!error) { %>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row"><%= mascota.id %></th>
+                    <td><%= mascota.nombre %> </td>
+                    <td><%= mascota.descripcion %></td>
+                    <td>
+                        <button
+                        class="btn btn-danger btn-sm"
+                        data-id="<%= mascota.id %>"
+                        >
+                        Eliminar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    <% } %>
+     
+  </div>
+
+    
+<%- include("templates/footer") %>
+
+<script>
+    // onclick vs addEventListener
+    // https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick#:~:text=Essentially%20onclick%20is%20a%20HTML,(using%20this%20for%20example).
+    
+    const btnEliminar = document.querySelector('.btn-danger')
+      btnEliminar.addEventListener('click', async() => {
+        console.log(btnEliminar.dataset.id)  
+        try {
+            // https://developer.mozilla.org/es/docs/Web/API/HTMLElement/dataset
+            const data = await fetch(`/mascotas/${btnEliminar.dataset.id}`, {
+              method: 'delete'
+            })
+            const res = await data.json()
+            console.log(res)
+            if(res.estado){
+                window.location.href = '/mascotas'
+            }else{
+                console.log(res)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+      })
+</script>
